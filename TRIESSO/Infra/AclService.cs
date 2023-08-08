@@ -13,21 +13,21 @@ namespace Infra
 
         static HttpClient client = new HttpClient();
 
-        public async void GetSamlAuth()
+        public async void GetSamlAuth(string samlRequestEncoded)
         {
-            //var urlBase = "https://win-nj6v2gg0m3q.trie.domain/adfs/ls";
-            var urlBase = "https://jsonplaceholder.typicode.com/todos/1";
+            var urlBase = "https://win-nj6v2gg0m3q.trie.domain/adfs/ls";
+            var urlComplete = QueryHelpers.AddQueryString(urlBase, "SAMLRequest", samlRequestEncoded);
 
-            //var urlComplete = QueryHelpers.AddQueryString(urlBase, "SAMLRequest", "sdfadfd");
-            var urlComplete = urlBase;
-
-            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
 
             var response = client.GetAsync(urlComplete).Result;
 
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
+
+                //TODO: Alterar a URL Base para que esta contenha a página aspx
+                //verificar como recuperar e armazenar o cookie para envia-lo na próxima requisição
             }
 
         }

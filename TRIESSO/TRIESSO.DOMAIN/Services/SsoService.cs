@@ -13,10 +13,10 @@ namespace TrieSSO.Domain
         public void GetSamlAuthRequest() {
 
             var aclService = new AclService();
-            aclService.GetSamlAuth();
+            aclService.GetSamlAuth(MakeSamlRequest());
         }
 
-        protected string MakeSamlRequest() 
+        protected static string MakeSamlRequest() 
         {
             var samlRequest = new SamlRequest(
                     "_" + Guid.NewGuid().ToString(),
