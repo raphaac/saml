@@ -19,15 +19,32 @@ namespace TRIESSO.Controllers
             _logger = logger;
         }
 
+        //[HttpGet]
+        //public IActionResult Get()
+        //{                       
+        //    var ssoService = new SsoService();
+        //    var requestSaml = ssoService.GetSamlAuthRequest(HttpContext);
+
+        //    return Ok(requestSaml);
+        //}
+
         [HttpGet]
-        public IActionResult Get()
+        [Route("/saml/getSamlAuth")]
+        public IActionResult GetSamlAuth()
         {
             var ssoService = new SsoService();
+            var requestSaml = ssoService.GetSamlAuthRequest(HttpContext);
 
-            ssoService.GetSamlAuthRequest();
+            return Ok(requestSaml);
+        }
 
-            return Ok();
+        [HttpPost]
+        public virtual async Task<IActionResult> RegisterSamlResponse([FromForm] string SAMLResponse)
+        {
+            var ssoService = new SsoService();
+            var samlResponse = ssoService.DecriptSamlResponse(SAMLResponse);
 
+            return Ok(samlResponse);
         }
     }
 }

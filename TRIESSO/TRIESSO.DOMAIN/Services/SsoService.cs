@@ -1,4 +1,5 @@
 ﻿using Infra;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -10,14 +11,29 @@ namespace TrieSSO.Domain
 {
     public class SsoService
     {
-        public void GetSamlAuthRequest() {
+        public string GetSamlAuthRequest(HttpContext context) {
 
             var aclService = new AclService();
-            aclService.GetSamlAuth(MakeSamlRequest());
+            return aclService.GetSamlAuth(MakeSamlRequest(), context).Result;
+        }
+
+        public string DecriptSamlResponse(string samlResponse) {
+
+            var valueInBase64 = Convert.FromBase64String(samlResponse);
+            var resultInStirng = Encoding.ASCII.GetString(valueInBase64);
+
+            return resultInStirng;
         }
 
         protected static string MakeSamlRequest() 
         {
+            //var samlRequest = new SamlRequest(
+            //        "_" + Guid.NewGuid().ToString(),
+            //        DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
+            //        "https://localhost:5001/trie",
+            //        "Trie");
+
+
             var samlRequest = new SamlRequest(
                     "_" + Guid.NewGuid().ToString(),
                     DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
@@ -47,7 +63,7 @@ namespace TrieSSO.Domain
                 xmlWriter.WriteEndElement();
 
                 xmlWriter.WriteStartElement("samlp", "NameIDPolicy", "urn:oasis:names:tc:SAML:2.0:protocol");
-                xmlWriter.WriteAttributeString("Format", "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+                xmlWriter.WriteAttributeString("Format", "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress");
                 xmlWriter.WriteAttributeString("AllowCreate", "true");
                 xmlWriter.WriteEndElement();
 

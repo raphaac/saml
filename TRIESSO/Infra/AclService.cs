@@ -1,10 +1,13 @@
 ﻿using Flurl.Http.Configuration;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace Infra
 {
@@ -13,23 +16,22 @@ namespace Infra
 
         static HttpClient client = new HttpClient();
 
-        public async void GetSamlAuth(string samlRequestEncoded)
+        public async Task<string> GetSamlAuth(string samlRequestEncoded, HttpContext context)
         {
-            var urlBase = "https://win-nj6v2gg0m3q.trie.domain/adfs/ls";
+            var urlBase = "https://win-nj6v2gg0m3q.trie.domain/adfs/ls/idpinitiatedsignonpage.aspx";
             var urlComplete = QueryHelpers.AddQueryString(urlBase, "SAMLRequest", samlRequestEncoded);
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
-
+            
             var response = client.GetAsync(urlComplete).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                var result = response.Content.ReadAsStringAsync().Result;
-
-                //TODO: Alterar a URL Base para que esta contenha a página aspx
-                //verificar como recuperar e armazenar o cookie para envia-lo na próxima requisição
+                var result = await response.Content.ReadAsStringAsync();
+                return string.Format("https://win-nj6v2gg0m3q.trie.domain/adfs/ls/idpinitiatedsignon.aspx?SAMLRequest={0}", HttpUtility.UrlEncode(samlRequestEncoded));
             }
 
+            return null;
         }
     }
 }
