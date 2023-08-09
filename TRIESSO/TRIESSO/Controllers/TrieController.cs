@@ -18,16 +18,7 @@ namespace TRIESSO.Controllers
         {
             _logger = logger;
         }
-
-        //[HttpGet]
-        //public IActionResult Get()
-        //{                       
-        //    var ssoService = new SsoService();
-        //    var requestSaml = ssoService.GetSamlAuthRequest(HttpContext);
-
-        //    return Ok(requestSaml);
-        //}
-
+                
         [HttpGet]
         [Route("/saml/getSamlAuth")]
         public IActionResult GetSamlAuth()
