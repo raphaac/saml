@@ -27,18 +27,18 @@ namespace TrieSSO.Domain
 
         protected static string MakeSamlRequest() 
         {
-            //var samlRequest = new SamlRequest(
-            //        "_" + Guid.NewGuid().ToString(),
-            //        DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
-            //        "https://localhost:5001/trie",
-            //        "Trie");
-
-
             var samlRequest = new SamlRequest(
                     "_" + Guid.NewGuid().ToString(),
                     DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
-                    "https://www.dropbox.com/saml_login",
-                    "Dropbox");
+                    "https://localhost:5001/Trie/sso/saml",
+                    "Trie");
+
+
+            //var samlRequest = new SamlRequest(
+            //        "_" + Guid.NewGuid().ToString(),
+            //        DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
+            //        "https://www.dropbox.com/saml_login",
+            //        "Dropbox");
 
             return GenerateSamlRequestCoded(samlRequest);
         }

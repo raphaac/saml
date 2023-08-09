@@ -20,8 +20,8 @@ namespace TRIESSO.Controllers
         }
                 
         [HttpGet]
-        [Route("/saml/getSamlAuth")]
-        public IActionResult GetSamlAuth()
+        [Route("sso/saml")]
+        public virtual async Task<IActionResult> GetSamlAuth()
         {
             var ssoService = new SsoService();
             var requestSaml = ssoService.GetSamlAuthRequest(HttpContext);
@@ -30,6 +30,7 @@ namespace TRIESSO.Controllers
         }
 
         [HttpPost]
+        [Route("sso/saml")]
         public virtual async Task<IActionResult> RegisterSamlResponse([FromForm] string SAMLResponse)
         {
             var ssoService = new SsoService();
