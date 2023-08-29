@@ -25,6 +25,12 @@ namespace TrieSSO.Domain
             return resultInStirng;
         }
 
+        public string SendLogout(string samlLogout)
+        {
+            var aclService = new AclService();
+            return aclService.PostSamlLogout(samlLogout).Result;
+        }
+
         protected static string MakeSamlRequest() 
         {
             var samlRequest = new SamlRequest(

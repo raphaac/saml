@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TrieSSO.Domain;
 
@@ -35,6 +32,16 @@ namespace TRIESSO.Controllers
         {
             var ssoService = new SsoService();
             var samlResponse = ssoService.DecriptSamlResponse(SAMLResponse);
+
+            return Ok(samlResponse);
+        }
+
+        [HttpPost]
+        [Route("sso/saml/logout")]
+        public virtual async Task<IActionResult> RegisterSamlLogout([FromForm] string SAMLResponse)
+        {
+            var ssoService = new SsoService();
+            var samlResponse = ssoService.SendLogout(SAMLResponse);
 
             return Ok(samlResponse);
         }
